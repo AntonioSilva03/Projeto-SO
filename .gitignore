@@ -1,0 +1,8 @@
+# Ignore executables
+.vscode
+
+a.out
+bin/*
+obj/*
+
+*main*
