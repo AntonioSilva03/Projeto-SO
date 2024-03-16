@@ -20,3 +20,4 @@ obj/client/client.o: src/client/client.c
 
 clean:
 	rm -f obj/orchestrator/* obj/client/* tmp/* bin/*
+	@rmdir bin obj/client obj/orchestrator obj tmp
