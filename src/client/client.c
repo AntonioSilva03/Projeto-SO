@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
         int time = atoi(argv[2]);
         char *option = argv[3];
         if(strcmp(option, "-u") == 0){
-
+            char** program = parseProgram(argv[4]);
         }
         else if(strcmp(option, "-p") == 0){
 
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
         }
     }
     else if(strcmp(command, "status") == 0){
-        
+
     }
     else{
 

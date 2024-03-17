@@ -3,5 +3,6 @@
 #include <stdlib.h>
 
 int new_fifo();
+char** parseProgram();
 
 #endif
