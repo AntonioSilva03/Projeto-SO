@@ -3,7 +3,7 @@
 #include "utils.h"
 
 int new_fifo(){
-    int fifo = mkfifo("../so-orchestrator/tmp/pipe", 0666);
+    int fifo = mkfifo(PIPE_PATH, 0666);
     if(fifo != 0){
         return 1;
     }
@@ -11,7 +11,7 @@ int new_fifo(){
 }
 
 char **parseProgram(char *program){
-    char **splittedArgs = malloc(6 * sizeof(char *));
+    char **splittedArgs = malloc(MAX_ARGS_SIZE);
 
     int i = 0;
     char *token = strtok(program, " ");

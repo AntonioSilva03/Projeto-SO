@@ -6,4 +6,6 @@
 
 #define EXECUTE_USAGE "Usage: execute <time> <-u || -p> <'prog-a [args] | prog-b [args] | ...'>\n"
 
+#define ARGS_ERROR "Wrong argument introduced. Use 'execute' or 'status'\n"
+
 #endif
