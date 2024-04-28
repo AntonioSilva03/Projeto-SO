@@ -23,6 +23,19 @@ int main(int argc, char *argv[]){
         char *option = argv[3];
         if(strcmp(option, "-u") == 0){
             char** program = parseProgram(argv[4]);
+            char request[BUFSIZ] = "execute\n";
+            char timestr[12];
+            sprintf(timestr, "%d\n", time);
+            strcat(request, timestr);
+            int i = 0;
+            while(program[i]){
+                strcat(request, program[i]);
+                strcat(request, "||");
+                i++;
+            }
+            fd_pipe = open(PIPE_PATH, O_WRONLY);
+            write(fd_pipe, request, sizeof(request));
+            close(fd_pipe);
         }
         else if(strcmp(option, "-p") == 0){
 
