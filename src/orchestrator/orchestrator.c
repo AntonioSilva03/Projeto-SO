@@ -21,18 +21,20 @@ int main(){
         read(fd_pipe, request, sizeof(request));
         close(fd_pipe);
 
-        int pid;
-        pid = fork();
+        int pid = fork();
 
         if(pid < 0){
-            perror("Error fork");
+            perror("Error: ");
             _exit(1);
         }
         else if(pid == 0){
-            // Child process
+            //handle_command(); // Child process
         }
         else if(pid > 0){
-            // Parent process
+            snprintf(response, sizeof(response), "Tarefa com ID: %d recebida com sucesso\n", pid);
+            fd_pipe = open(PIPE_PATH, O_WRONLY);
+            write(fd_pipe, response, sizeof(response));
+            close(fd_pipe);
         }
     }
     return 0;

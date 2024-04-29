@@ -36,6 +36,14 @@ int main(int argc, char *argv[]){
             fd_pipe = open(PIPE_PATH, O_WRONLY);
             write(fd_pipe, request, sizeof(request));
             close(fd_pipe);
+
+            char response[BUFSIZ];
+
+            fd_pipe = open(PIPE_PATH, O_RDONLY);
+            read(fd_pipe, response, sizeof(response));
+            close(fd_pipe);
+
+            write(STDOUT_FILENO, response, strlen(response));
         }
         else if(strcmp(option, "-p") == 0){
 
