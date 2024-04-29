@@ -1,5 +1,6 @@
 #include <sys/stat.h>
 #include <string.h>
+#include <stdio.h>
 #include "utils.h"
 
 int new_fifo(){

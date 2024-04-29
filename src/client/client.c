@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
             int i = 0;
             while(program[i]){
                 strcat(request, program[i]);
-                strcat(request, "||");
+                strcat(request, " ");
                 i++;
             }
             fd_pipe = open(PIPE_PATH, O_WRONLY);

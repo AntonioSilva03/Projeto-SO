@@ -5,4 +5,6 @@
 
 typedef struct task *Tarefa;
 
+Tarefa novaTarefa(int id, char* name, char** args);
+
 #endif

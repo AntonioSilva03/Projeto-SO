@@ -6,6 +6,6 @@
 #define PIPE_PATH "../so-orchestrator/tmp/pipe"
 
 int new_fifo();
-char** parseProgram();
+char** parseProgram(char *program);
 
 #endif

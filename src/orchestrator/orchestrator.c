@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
 #include "../utils/utils.h"
 #include "../utils/messages.h"
+#include "handler.h"
 
 int main(){
     int fd_pipe;
@@ -28,7 +30,7 @@ int main(){
             _exit(1);
         }
         else if(pid == 0){
-            //handle_command(); // Child process
+            handle_command(getpid(), strdup(request)); // Child process
         }
         else if(pid > 0){
             snprintf(response, sizeof(response), "Tarefa com ID: %d recebida com sucesso\n", pid);
