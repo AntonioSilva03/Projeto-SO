@@ -1,6 +1,8 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "utils.h"
 
 int new_fifo(){
@@ -22,4 +24,16 @@ char **parseProgram(char *program){
         i++;
     }
     return splittedArgs;
+}
+
+void writeSettings(char* args[]){
+    int fd = open(SETTINGS_PATH, O_WRONLY | O_CREAT, 0666);
+    char string[BUFSIZ] = "";
+    int i = 1;
+    while(args[i]){
+        strcat(string, args[i]);
+        strcat(string, "\n");
+        i++;
+    }
+    write(fd, string, strlen(string));
 }

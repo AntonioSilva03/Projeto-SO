@@ -1,21 +1,16 @@
 #include "task.h"
 #include <string.h>
+#include "program.h"
 
 struct task{
     int id;
-    char* name;
-    char** argss; 
+    Programa programa;
 };
 
 Tarefa novaTarefa(int id, char* name, char** args){
     Tarefa t = malloc(sizeof(struct task));
     t->id = id;
-    t->name = strdup(name);
-    t->argss = malloc(sizeof(args));
-    int i = 0;
-    while(args[i]){
-        t->argss[i] = strdup(args[i]);
-        i++;
-    }
+    Programa p = novoPrograma(name, args);
+    t->programa = p;
     return t;
 }

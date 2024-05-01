@@ -8,8 +8,8 @@ folders:
 
 # SERVER
 
-bin/orchestrator: obj/orchestrator/orchestrator.o obj/utils/utils.o obj/orchestrator/handler.o obj/orchestrator/task.o
-	gcc -g obj/orchestrator/orchestrator.o obj/utils/utils.o obj/orchestrator/handler.o obj/orchestrator/task.o -o bin/orchestrator
+bin/orchestrator: obj/orchestrator/orchestrator.o obj/utils/utils.o obj/orchestrator/handler.o obj/orchestrator/task.o obj/orchestrator/db.o obj/orchestrator/escalonador.o obj/orchestrator/program.o
+	gcc -g obj/orchestrator/orchestrator.o obj/utils/utils.o obj/orchestrator/handler.o obj/orchestrator/task.o obj/orchestrator/db.o obj/orchestrator/escalonador.o obj/orchestrator/program.o -o bin/orchestrator
 
 obj/orchestrator/orchestrator.o: src/orchestrator/orchestrator.c
 	gcc -Wall -g -c src/orchestrator/orchestrator.c -o obj/orchestrator/orchestrator.o
@@ -19,6 +19,15 @@ obj/orchestrator/handler.o: src/orchestrator/handler.c
 
 obj/orchestrator/task.o: src/orchestrator/task.c
 	gcc -Wall -g -c src/orchestrator/task.c -o obj/orchestrator/task.o
+
+obj/orchestrator/db.o: src/orchestrator/db.c
+	gcc -Wall -g -c src/orchestrator/db.c -o obj/orchestrator/db.o
+
+obj/orchestrator/escalonador.o: src/orchestrator/escalonador.c
+	gcc -Wall -g -c src/orchestrator/escalonador.c -o obj/orchestrator/escalonador.o
+
+obj/orchestrator/program.o: src/orchestrator/program.c
+	gcc -Wall -g -c src/orchestrator/program.c -o obj/orchestrator/program.o
 
 # CLIENT
 

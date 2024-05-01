@@ -7,7 +7,7 @@
 #include "../utils/messages.h"
 #include "handler.h"
 
-int main(){
+int main(int argc, char *argv[]){
     int fd_pipe;
 
     char request[BUFSIZ];
@@ -17,6 +17,8 @@ int main(){
         write(STDERR_FILENO, PIPE_ERROR, sizeof(PIPE_ERROR));
         _exit(1);
     }
+
+    writeSettings(argv);
 
     while(1){
         fd_pipe = open(PIPE_PATH, O_RDONLY);
