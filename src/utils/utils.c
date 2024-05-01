@@ -6,6 +6,7 @@
 #include "utils.h"
 
 int new_fifo(){
+    unlink(PIPE_PATH);
     int fifo = mkfifo(PIPE_PATH, 0666);
     if(fifo != 0){
         return 1;
