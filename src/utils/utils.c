@@ -38,3 +38,9 @@ void writeSettings(char* args[]){
     }
     write(fd, string, strlen(string));
 }
+
+void createNumProcess(){
+    int fd = open(PROCESS_PATH, O_WRONLY | O_CREAT, 0666);
+    char string[BUFSIZ] = "0";
+    write(fd, string, strlen(string));
+}

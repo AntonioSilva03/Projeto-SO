@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
                 i++;
             }
             fd_pipe = open(PIPE_PATH, O_WRONLY);
-            write(fd_pipe, request, sizeof(request));
+            write(fd_pipe, request, strlen(request));
             close(fd_pipe);
 
             char response[BUFSIZ];
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
     }
     else if(strcmp(command, "status") == 0){
         fd_pipe = open(PIPE_PATH, O_WRONLY);
-        write(fd_pipe, command, sizeof(command)); // Pedido de estado ao servidor
+        write(fd_pipe, command, strlen(command)); // Pedido de estado ao servidor
         close(fd_pipe);
 
         char response[BUFSIZ];
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
         read(fd_pipe, response, sizeof(response)); // Espera pela resposta que foi processada pelo servidor
         close(fd_pipe);
 
-        write(STDOUT_FILENO, response, sizeof(response));
+        write(STDOUT_FILENO, response, strlen(response));
     }
     else{
         write(STDERR_FILENO, ARGS_ERROR, sizeof(ARGS_ERROR));

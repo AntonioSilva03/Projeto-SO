@@ -19,6 +19,7 @@ int main(int argc, char *argv[]){
     }
 
     writeSettings(argv);
+    createNumProcess();
 
     while(1){
         fd_pipe = open(PIPE_PATH, O_RDONLY);
@@ -33,11 +34,12 @@ int main(int argc, char *argv[]){
         }
         else if(pid == 0){
             handle_command(getpid(), strdup(request)); // Child process
+            break;
         }
         else if(pid > 0){
-            snprintf(response, sizeof(response), "Tarefa com ID: %d recebida com sucesso\n", pid);
+            snprintf(response, sizeof(response), "Pedido com ID: %d recebida com sucesso\n", pid);
             fd_pipe = open(PIPE_PATH, O_WRONLY);
-            write(fd_pipe, response, sizeof(response));
+            write(fd_pipe, response, strlen(response));
             close(fd_pipe);
         }
     }
