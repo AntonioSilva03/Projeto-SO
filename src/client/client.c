@@ -33,13 +33,13 @@ int main(int argc, char *argv[]){
                 strcat(request, " ");
                 i++;
             }
-            fd_pipe = open(PIPE_PATH, O_WRONLY);
+            fd_pipe = open(PIPE_READ_PATH, O_WRONLY);
             write(fd_pipe, request, strlen(request));
             close(fd_pipe);
 
             char response[BUFSIZ];
 
-            fd_pipe = open(PIPE_PATH, O_RDONLY);
+            fd_pipe = open(PIPE_WRITE_PATH, O_RDONLY);
             read(fd_pipe, response, sizeof(response));
             close(fd_pipe);
 
@@ -54,13 +54,13 @@ int main(int argc, char *argv[]){
         }
     }
     else if(strcmp(command, "status") == 0){
-        fd_pipe = open(PIPE_PATH, O_WRONLY);
+        fd_pipe = open(PIPE_READ_PATH, O_WRONLY);
         write(fd_pipe, command, strlen(command)); // Pedido de estado ao servidor
         close(fd_pipe);
 
         char response[BUFSIZ];
 
-        fd_pipe = open(PIPE_PATH, O_RDONLY);
+        fd_pipe = open(PIPE_WRITE_PATH, O_RDONLY);
         read(fd_pipe, response, sizeof(response)); // Espera pela resposta que foi processada pelo servidor
         close(fd_pipe);
 

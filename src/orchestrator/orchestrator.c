@@ -23,11 +23,12 @@ int main(int argc, char *argv[]){
     createTmpFiles();
 
     while(1){
-        fd_pipe = open(PIPE_PATH, O_RDONLY);
+        fd_pipe = open(PIPE_READ_PATH, O_RDONLY);
         read(fd_pipe, request, sizeof(request));
         close(fd_pipe);
 
         handle_command(strdup(request));
+        memset(request, '\0', sizeof(request));
 
         /*int pid = fork();
 

@@ -26,7 +26,7 @@ void handle_command(char* request){
         else if(pid > 0){
             char response[BUFSIZ];
             snprintf(response, sizeof(response), "Pedido com ID: %d recebida com sucesso\n", pid);
-            fd_pipe = open(PIPE_PATH, O_WRONLY);
+            fd_pipe = open(PIPE_WRITE_PATH, O_WRONLY);
             write(fd_pipe, response, strlen(response));
             close(fd_pipe);
             free(prog);
@@ -40,7 +40,7 @@ void handle_command(char* request){
         }
         else if(pid == 0){
             char* status = getStatus();
-            fd_pipe = open(PIPE_PATH, O_WRONLY);
+            fd_pipe = open(PIPE_WRITE_PATH, O_WRONLY);
             write(fd_pipe, status, strlen(status));
             close(fd_pipe);
             free(status);
