@@ -38,8 +38,7 @@ void addTask(Tarefa t){
             waitpid(pid, NULL, 0);
             gettimeofday(&end, NULL);
             close(fd_output);
-            printf("%ld - %ld\n", end.tv_usec, start.tv_usec);
-            addFinished(t, end.tv_usec - start.tv_usec);
+            addFinished(t, (end.tv_sec - start.tv_sec) * 1000000 + abs(end.tv_usec));
         }
     }
     //else addQueue(t);
