@@ -36,10 +36,16 @@ void createFinishedFile(){
     close(fd);
 }
 
+void createExecFile(){
+    int fd = open(EXEC_PATH, O_WRONLY | O_CREAT, 0666);
+    close(fd);
+}
+
 void createTmpFiles(){
     createNumProcess();
     createQueueFile();
     createFinishedFile();
+    createExecFile();
 }
 
 int checkSpace(){
@@ -80,4 +86,33 @@ void addFinished(Tarefa t, unsigned long time){
     sprintf(timeStr, "%ld ms\n", time);
     strcat(data, timeStr);
     write(fd, data, strlen(data));
+}
+
+void addQueue(Tarefa t){
+    int fd = open(QUEUE_PATH, O_WRONLY | O_APPEND, 0666);
+    char data[BUFSIZ];
+    sprintf(data, "%d ", getID(t));
+    Programa p = getPrograma(t);
+    char* name = getName(p);
+    strcat(data, name);
+    char** args = getArgs(p);
+    int i = 0;
+    while(args[i]){
+        strcat(data, " ");
+        strcat(data, strdup(args[i]));
+        i++;
+    }
+    strcat(data, "\n");
+    write(fd, data, strlen(data));
+    close(fd);
+}
+
+void addExecking(Tarefa t){
+    int fd = open(EXEC_PATH, O_WRONLY | O_APPEND, 0666);
+    char data[128];
+    sprintf(data, "%d ", getID(t));
+    char* name = getName(getPrograma(t));
+    strcat(data, name);
+    write(fd, data, strlen(data));
+    close(fd);
 }

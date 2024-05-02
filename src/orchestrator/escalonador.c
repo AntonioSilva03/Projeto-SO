@@ -19,8 +19,7 @@ void addTask(Tarefa t){
     struct timeval start;
     struct timeval end;
     if(checkSpace()){
-        gettimeofday(&start, NULL);
-        //addExecking(t);
+        addExecking(t);
         int pid = fork();
         if(pid < 0){
             perror("Error fork start exec: ");
@@ -35,13 +34,14 @@ void addTask(Tarefa t){
             execvp(getName(p), getArgs(p));
         }
         else if(pid > 0){
+            gettimeofday(&start, NULL);
             waitpid(pid, NULL, 0);
             gettimeofday(&end, NULL);
             close(fd_output);
             addFinished(t, (end.tv_sec - start.tv_sec) * 1000000 + abs(end.tv_usec));
         }
     }
-    //else addQueue(t);
+    else addQueue(t);
 }
 
 char *getStatus(){

@@ -9,6 +9,7 @@
 #define PROCESS_PATH "../so-orchestrator/tmp/num_process.txt"
 #define QUEUE_PATH "../so-orchestrator/tmp/queue.txt"
 #define FINISHED_PATH "../so-orchestrator/tmp/finished.txt"
+#define EXEC_PATH "../so-orchestrator/tmp/exec.txt"
 #define PROGRAM_PATH "../so-orchestrator/programs/"
 
 int new_fifo();

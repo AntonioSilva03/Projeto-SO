@@ -19,7 +19,7 @@ void handle_command(char* request){
             perror("Error forking exec: ");
         }
         else if(pid == 0){
-            Tarefa t = novaTarefa(getpid(), prog[0], &prog[1]);
+            Tarefa t = novaTarefa(getpid(), prog[0], &prog[0]);
             addTask(t);
             _exit(0);
         }
