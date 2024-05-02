@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include "../utils/utils.h"
 #include "program.h"
+#include <sys/time.h>
 
 Tarefa* emExec;
 Tarefa* queue;
@@ -31,9 +32,13 @@ void addTask(Tarefa t){
             execvp(getName(p), getArgs(p));
         }
         else if(pid > 0){
+            struct timeval start;
+            struct timeval end;
+            gettimeofday(&start, NULL);
             wait(NULL);
+            gettimeofday(&end, NULL);
             close(fd_output);
-            //addFinished(t);
+            addFinished(t, end.tv_usec - start.tv_usec);
         }
     }
     //else addQueue(t);

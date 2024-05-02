@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
+#include "task.h"
 
 void writeSettings(char* args[]){
     int fd = open(SETTINGS_PATH, O_WRONLY | O_CREAT, 0666);
@@ -64,4 +65,19 @@ char* getOutputFile(){
     int fd = open(SETTINGS_PATH, O_RDONLY, 0666);
     read(fd, file, sizeof(file));
     return strtok(file, "\n");
+}
+
+void addFinished(Tarefa t, int time){
+    int fd = open(FINISHED_PATH, O_WRONLY, 0666);
+    char data[96];
+    sprintf(data, "%d ", getID(t));
+
+    Programa p = getPrograma(t);
+    strcat(data, getName(p));
+    strcat(data, " ");
+
+    char timeStr[28];
+    sprintf(timeStr, "%d", time);
+    strcat(data, timeStr);
+    write(fd, data, strlen(data));
 }
