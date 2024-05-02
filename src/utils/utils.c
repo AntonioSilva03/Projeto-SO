@@ -27,20 +27,13 @@ char **parseProgram(char *program){
     return splittedArgs;
 }
 
-void writeSettings(char* args[]){
-    int fd = open(SETTINGS_PATH, O_WRONLY | O_CREAT, 0666);
-    char string[BUFSIZ] = "";
-    int i = 1;
-    while(args[i]){
-        strcat(string, args[i]);
-        strcat(string, "\n");
-        i++;
-    }
-    write(fd, string, strlen(string));
-}
+char *buildPath(char* mainPath, int pid){
+    char pidStr[40];
+    snprintf(pidStr, sizeof(pidStr), "%d.txt", pid);
 
-void createNumProcess(){
-    int fd = open(PROCESS_PATH, O_WRONLY | O_CREAT, 0666);
-    char string[BUFSIZ] = "0";
-    write(fd, string, strlen(string));
+    char* fileName = malloc(128);
+    strcpy(fileName, mainPath);
+    strcat(fileName, pidStr);
+
+    return fileName;
 }

@@ -5,6 +5,7 @@
 #include <string.h>
 #include "../utils/utils.h"
 #include "../utils/messages.h"
+#include "db.h"
 #include "handler.h"
 
 int main(int argc, char *argv[]){
@@ -19,14 +20,16 @@ int main(int argc, char *argv[]){
     }
 
     writeSettings(argv);
-    createNumProcess();
+    createTmpFiles();
 
     while(1){
         fd_pipe = open(PIPE_PATH, O_RDONLY);
         read(fd_pipe, request, sizeof(request));
         close(fd_pipe);
 
-        int pid = fork();
+        handle_command(strdup(request));
+
+        /*int pid = fork();
 
         if(pid < 0){
             perror("Error: ");
@@ -41,7 +44,7 @@ int main(int argc, char *argv[]){
             fd_pipe = open(PIPE_PATH, O_WRONLY);
             write(fd_pipe, response, strlen(response));
             close(fd_pipe);
-        }
+        }*/
     }
     return 0;
 }

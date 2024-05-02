@@ -6,5 +6,7 @@
 typedef struct program *Programa;
 
 Programa novoPrograma(char* name, char** args);
+char* getName(Programa p);
+char** getArgs(Programa p);
 
 #endif

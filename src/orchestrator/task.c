@@ -14,3 +14,11 @@ Tarefa novaTarefa(int id, char* name, char** args){
     t->programa = p;
     return t;
 }
+
+int getID(Tarefa t){
+    return t->id;
+}
+
+Programa getPrograma(Tarefa t){
+    return t->programa;
+}
