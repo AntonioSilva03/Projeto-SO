@@ -16,7 +16,10 @@ int numProcess = 0;
 
 void addTask(Tarefa t){
     int fd_output;
+    struct timeval start;
+    struct timeval end;
     if(checkSpace()){
+        gettimeofday(&start, NULL);
         //addExecking(t);
         int pid = fork();
         if(pid < 0){
@@ -32,12 +35,10 @@ void addTask(Tarefa t){
             execvp(getName(p), getArgs(p));
         }
         else if(pid > 0){
-            struct timeval start;
-            struct timeval end;
-            gettimeofday(&start, NULL);
-            wait(NULL);
+            waitpid(pid, NULL, 0);
             gettimeofday(&end, NULL);
             close(fd_output);
+            printf("%ld - %ld\n", end.tv_usec, start.tv_usec);
             addFinished(t, end.tv_usec - start.tv_usec);
         }
     }

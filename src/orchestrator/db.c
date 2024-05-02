@@ -67,8 +67,8 @@ char* getOutputFile(){
     return strtok(file, "\n");
 }
 
-void addFinished(Tarefa t, int time){
-    int fd = open(FINISHED_PATH, O_WRONLY, 0666);
+void addFinished(Tarefa t, unsigned long time){
+    int fd = open(FINISHED_PATH, O_WRONLY | O_APPEND, 0666);
     char data[96];
     sprintf(data, "%d ", getID(t));
 
@@ -77,7 +77,7 @@ void addFinished(Tarefa t, int time){
     strcat(data, " ");
 
     char timeStr[28];
-    sprintf(timeStr, "%d", time);
+    sprintf(timeStr, "%ld ms\n", time);
     strcat(data, timeStr);
     write(fd, data, strlen(data));
 }

@@ -15,11 +15,10 @@ int main(int argc, char** argv){
         perror("Time (s) must be higher than 1");
         return -1;
     }
+    srand(time);
 
-    for(int i=0;i<time*1000; i++){
-        printf("%d: Hello, cosmos! May our paths intertwine in endless discovery\n", i);
-        usleep(1000);
-    }
+    sleep(time);
+    printf("The magic number is %d\n", rand());
 
     return 0;
 }
