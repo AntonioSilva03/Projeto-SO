@@ -12,6 +12,8 @@
 #define EXEC_PATH "../so-orchestrator/tmp/exec.txt"
 #define PROGRAM_PATH "../so-orchestrator/programs/"
 
+#define LIM_ID 100000
+
 int new_fifo();
 char** parseProgram(char *program);
 void writeSettings(char* args[]);

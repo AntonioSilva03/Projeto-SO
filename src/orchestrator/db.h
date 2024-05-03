@@ -5,20 +5,14 @@
 #include "task.h"
 
 void writeSettings(char* args[]);
-void createNumProcess();
-void incProcesses(int opt);
-void createQueueFile();
-void createFinishedFile();
 void createTmpFiles();
-int checkSpace();
+int checkSpace(Tarefa* queue, int maxSize);
+int getSpace();
 char* getOutputFile();
 void addFinished(Tarefa t, unsigned long time);
 char* getFinished();
-void addQueue(Tarefa t);
-Tarefa removeQueue();
-char* getQueue();
-void addExecking(Tarefa t);
-void removeExecking(Tarefa t);
-char* getExecking();
+void addQueue(Tarefa* queue, Tarefa t);
+void addExecking(Tarefa* exec, int maxSize, Tarefa t);
+void removeExecking(Tarefa* exec, int maxSize, int pid);
 
 #endif

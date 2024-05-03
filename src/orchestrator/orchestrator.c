@@ -21,31 +21,17 @@ int main(int argc, char *argv[]){
 
     writeSettings(argv);
     createTmpFiles();
+    initDB();
 
     while(1){
+        printf("Leitura\n");
         fd_pipe = open(PIPE_READ_PATH, O_RDONLY);
         read(fd_pipe, request, sizeof(request));
+        printf("Ja volto\n");
         close(fd_pipe);
 
         handle_command(strdup(request));
         memset(request, '\0', sizeof(request));
-
-        /*int pid = fork();
-
-        if(pid < 0){
-            perror("Error: ");
-            _exit(1);
-        }
-        else if(pid == 0){
-            handle_command(getpid(), strdup(request)); // Child process
-            break;
-        }
-        else if(pid > 0){
-            snprintf(response, sizeof(response), "Pedido com ID: %d recebida com sucesso\n", pid);
-            fd_pipe = open(PIPE_PATH, O_WRONLY);
-            write(fd_pipe, response, strlen(response));
-            close(fd_pipe);
-        }*/
     }
     return 0;
 }

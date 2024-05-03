@@ -4,6 +4,6 @@
 #define ESCALONADOR_H
 
 void addTask(Tarefa t);
-char* getStatus();
+char *getStatus(Tarefa* queue, Tarefa* exec, int maxSize);
 
 #endif
