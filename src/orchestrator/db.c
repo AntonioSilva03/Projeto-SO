@@ -17,6 +17,7 @@ void writeSettings(char* args[]){
         i++;
     }
     write(fd, string, strlen(string));
+    close(fd);
 }
 
 void createNumProcess(){
@@ -40,6 +41,7 @@ void incProcesses(int opt){
     if(opt == 1) sprintf(newSize, "%d\n", sizeT + 1);
     else sprintf(newSize, "%d\n", sizeT - 1);
     write(fd_size, newSize, strlen(newSize));
+    close(fd_size);
 }
 
 void createQueueFile(){
@@ -75,6 +77,7 @@ int checkSpace(){
 
     fd_opt = open(SETTINGS_PATH, O_RDONLY, 0666);
     read(fd_opt, opt, sizeof(opt));
+    close(fd_opt);
     strtok(opt, "\n");
     int maxSize = atoi(strtok(NULL, "\n"));
 
@@ -86,6 +89,7 @@ char* getOutputFile(){
     char file[BUFSIZ];
     int fd = open(SETTINGS_PATH, O_RDONLY, 0666);
     read(fd, file, sizeof(file));
+    close(fd);
     return strtok(file, "\n");
 }
 
@@ -102,6 +106,21 @@ void addFinished(Tarefa t, unsigned long time){
     sprintf(timeStr, "%ld ms\n", time);
     strcat(data, timeStr);
     write(fd, data, strlen(data));
+    close(fd);
+}
+
+char* getFinished(){
+    char *data = malloc(BUFSIZ);
+    strcpy(data, "Finished:\n");
+    char* buffer = malloc(BUFSIZ);
+    int fd = open(FINISHED_PATH, O_RDONLY);
+    read(fd, buffer, BUFSIZ);
+    close(fd);
+    strcat(data, buffer);
+    strcat(data, "\n");
+    free(buffer);
+
+    return data;
 }
 
 void addQueue(Tarefa t){
@@ -141,12 +160,30 @@ Tarefa removeQueue(){
         ftruncate(fd, bytes_escritos);
         close(fd);
 
-        char** program = parseProgram(primeira_linha);
+        char* primeira_linhaa = strdup(primeira_linha);
+
+        char** program = parseProgram(primeira_linhaa);
         Tarefa t = novaTarefa(atoi(program[0]), program[1], &program[2]);
+
+        free(primeira_linhaa);
 
         return t;
     }
     return NULL;
+}
+
+char* getQueue(){
+    char *data = malloc(BUFSIZ);
+    strcpy(data, "Scheduled:\n");
+    char* buffer = malloc(BUFSIZ);
+    int fd = open(QUEUE_PATH, O_RDONLY);
+    read(fd, buffer, BUFSIZ);
+    close(fd);
+    strcat(data, buffer);
+    strcat(data, "\n");
+    free(buffer);
+
+    return data;
 }
 
 void addExecking(Tarefa t){
@@ -168,7 +205,8 @@ void removeExecking(Tarefa t){
     read(fd, data, sizeof(data));
     close(fd);
 
-    char* newData = malloc(BUFSIZ);
+    char newData[BUFSIZ];
+    strcpy(newData, "");
 
     char* line = strtok(data, "\n");
     while(line){
@@ -176,6 +214,7 @@ void removeExecking(Tarefa t){
         char idText[40];
         sscanf(lineDup, "%[^;]%*c", idText);
         int idLine = atoi(idText);
+
         if(idLine != id){
             strcat(newData, line);
             strcat(newData, "\n");
@@ -184,7 +223,20 @@ void removeExecking(Tarefa t){
         line = strtok(NULL, "\n");
     }
     fd = open(EXEC_PATH, O_WRONLY | O_TRUNC);
-    if(strlen(newData) > 1) write(fd, newData, strlen(newData));
+    if(strlen(newData) > 16) write(fd, newData, strlen(newData));
     close(fd);
-    free(newData);
+}
+
+char* getExecking(){
+    char *data = malloc(BUFSIZ);
+    strcpy(data, "Executing:\n");
+    char* buffer = malloc(BUFSIZ);
+    int fd = open(EXEC_PATH, O_RDONLY);
+    read(fd, buffer, BUFSIZ);
+    close(fd);
+    strcat(data, buffer);
+    strcat(data, "\n");
+    free(buffer);
+
+    return data;
 }

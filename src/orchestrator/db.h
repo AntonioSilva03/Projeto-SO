@@ -13,9 +13,12 @@ void createTmpFiles();
 int checkSpace();
 char* getOutputFile();
 void addFinished(Tarefa t, unsigned long time);
+char* getFinished();
 void addQueue(Tarefa t);
 Tarefa removeQueue();
+char* getQueue();
 void addExecking(Tarefa t);
 void removeExecking(Tarefa t);
+char* getExecking();
 
 #endif

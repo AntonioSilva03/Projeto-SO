@@ -55,6 +55,15 @@ void addTask(Tarefa t){
 
 char *getStatus(){
     char* status = malloc(BUFSIZ);
-    strcpy(status, "Boas mano ta tudo este e um status bue nice\n");
+    strcpy(status, getExecking());
+
+    char buffer1[BUFSIZ];
+    strcpy(buffer1, getQueue());
+    strcat(status, buffer1);
+
+    char buffer2[BUFSIZ];
+    strcpy(buffer2, getFinished());
+    strcat(status, buffer2);
+
     return status;
 }
