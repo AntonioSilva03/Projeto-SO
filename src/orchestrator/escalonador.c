@@ -20,6 +20,7 @@ void addTask(Tarefa t){
     struct timeval end;
     if(checkSpace()){
         addExecking(t);
+        incProcesses(1);
         int pid = fork();
         if(pid < 0){
             perror("Error fork start exec: ");
@@ -36,9 +37,17 @@ void addTask(Tarefa t){
         else if(pid > 0){
             gettimeofday(&start, NULL);
             waitpid(pid, NULL, 0);
+            removeExecking(t);
+            incProcesses(0);
             gettimeofday(&end, NULL);
             close(fd_output);
             addFinished(t, (end.tv_sec - start.tv_sec) * 1000000 + abs(end.tv_usec));
+            free(t);
+
+            Tarefa nova = removeQueue();
+            if(nova){
+                addTask(nova);
+            }
         }
     }
     else addQueue(t);

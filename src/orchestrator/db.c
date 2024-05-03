@@ -26,6 +26,22 @@ void createNumProcess(){
     close(fd);
 }
 
+void incProcesses(int opt){
+    int fd_size;
+    char size[4];
+
+    fd_size = open(PROCESS_PATH, O_RDONLY, 0666);
+    read(fd_size, size, sizeof(size));
+    close(fd_size);
+    int sizeT = atoi(size);
+
+    fd_size = open(PROCESS_PATH, O_WRONLY | O_TRUNC, 0666);
+    char newSize[4];
+    if(opt == 1) sprintf(newSize, "%d\n", sizeT + 1);
+    else sprintf(newSize, "%d\n", sizeT - 1);
+    write(fd_size, newSize, strlen(newSize));
+}
+
 void createQueueFile(){
     int fd = open(QUEUE_PATH, O_WRONLY | O_CREAT, 0666);
     close(fd);
@@ -107,12 +123,68 @@ void addQueue(Tarefa t){
     close(fd);
 }
 
+Tarefa removeQueue(){
+    int fd = open(QUEUE_PATH, O_RDWR, 0666);
+    char data[BUFSIZ];
+    ssize_t bytes_lidos = read(fd, data, sizeof(data));
+
+    if(bytes_lidos > 0){
+        char* newDataa = strchr(data, '\n');
+        size_t tamanho_restante = bytes_lidos - (newDataa - data) - 1;
+
+        char primeira_linha[newDataa - data + 1];
+        strncpy(primeira_linha, data, newDataa - data);
+        primeira_linha[newDataa - data] = '\0';
+
+        lseek(fd, 0, SEEK_SET);
+        ssize_t bytes_escritos = write(fd, newDataa + 1, tamanho_restante);
+        ftruncate(fd, bytes_escritos);
+        close(fd);
+
+        char** program = parseProgram(primeira_linha);
+        Tarefa t = novaTarefa(atoi(program[0]), program[1], &program[2]);
+
+        return t;
+    }
+    return NULL;
+}
+
 void addExecking(Tarefa t){
     int fd = open(EXEC_PATH, O_WRONLY | O_APPEND, 0666);
     char data[128];
     sprintf(data, "%d ", getID(t));
     char* name = getName(getPrograma(t));
     strcat(data, name);
+    strcat(data, "\n");
     write(fd, data, strlen(data));
     close(fd);
+}
+
+void removeExecking(Tarefa t){
+    int id = getID(t);
+
+    int fd = open(EXEC_PATH, O_RDONLY);
+    char data[BUFSIZ];
+    read(fd, data, sizeof(data));
+    close(fd);
+
+    char* newData = malloc(BUFSIZ);
+
+    char* line = strtok(data, "\n");
+    while(line){
+        char* lineDup = strdup(line);
+        char idText[40];
+        sscanf(lineDup, "%[^;]%*c", idText);
+        int idLine = atoi(idText);
+        if(idLine != id){
+            strcat(newData, line);
+            strcat(newData, "\n");
+        }
+        free(lineDup);
+        line = strtok(NULL, "\n");
+    }
+    fd = open(EXEC_PATH, O_WRONLY | O_TRUNC);
+    if(strlen(newData) > 1) write(fd, newData, strlen(newData));
+    close(fd);
+    free(newData);
 }

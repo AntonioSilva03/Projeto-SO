@@ -45,3 +45,8 @@ obj/utils/utils.o: src/utils/utils.c
 clean:
 	rm -f obj/orchestrator/* obj/client/* obj/utils/* tmp/* bin/*
 	@rmdir bin obj/client obj/orchestrator obj/utils obj tmp
+
+# Apaga todos os ficheiros de output de tarefas
+
+cleanout:
+	rm -f out/*.txt
