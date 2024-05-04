@@ -58,7 +58,7 @@ char* getOutputFile(){
 
 void addFinished(Tarefa t, unsigned long time){
     int fd = open(FINISHED_PATH, O_WRONLY | O_APPEND, 0666);
-    char data[96];
+    char data[BUFSIZ];
     sprintf(data, "%d ", getID(t));
 
     if(!getPipelineStatus(t)){
