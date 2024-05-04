@@ -35,10 +35,7 @@ void executePipeline(Tarefa t){
             dup2(fd_output, STDOUT_FILENO);
             dup2(fd_output, STDERR_FILENO);
 
-            char fullPath[BUFSIZ];
-            strcpy(fullPath, PROGRAM_PATH);
-            strcat(fullPath, getName(pipeline[i]));
-            execvp(fullPath, getArgs(pipeline[i]));
+            execvp(getName(pipeline[i]), getArgs(pipeline[i]));
         }
         else if(pid > 0){
             waitpid(pid, NULL, 0);
@@ -78,10 +75,7 @@ void addTask(Tarefa t){
         dup2(fd_output, STDOUT_FILENO);
         dup2(fd_output, STDERR_FILENO);
 
-        char fullPath[BUFSIZ];
-        strcpy(fullPath, PROGRAM_PATH);
-        strcat(fullPath, getName(p));
-        execvp(fullPath, getArgs(p));
+        execvp(getName(p), getArgs(p));
     }
     else if(pid > 0){
         gettimeofday(&start, NULL);

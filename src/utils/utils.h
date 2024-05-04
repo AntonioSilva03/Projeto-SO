@@ -7,7 +7,6 @@
 #define PIPE_WRITE_PATH "../so-orchestrator/tmp/write"
 #define SETTINGS_PATH "../so-orchestrator/tmp/settings.txt"
 #define FINISHED_PATH "../so-orchestrator/tmp/finished.txt"
-#define PROGRAM_PATH "../so-orchestrator/programs/"
 
 #define LIMITADOR_MENSAGENS "??"
 

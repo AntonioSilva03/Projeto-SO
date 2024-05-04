@@ -24,7 +24,6 @@ Programa* novaPipeline(char* pipe){
 
 Programa novoPrograma(char* name, char** args){
     Programa p = malloc(sizeof(struct program));
-    char path[256] = PROGRAM_PATH;
     p->name = strdup(name);
     p->argss = malloc(sizeof(args));
     int i = 0;
