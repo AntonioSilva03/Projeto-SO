@@ -145,7 +145,7 @@ char *getStatus(Tarefa* queue, Tarefa* exec, int maxSize){
         else{
             char line[BUFSIZ];
             sprintf(line, "%d ", getID(queue[i]));
-            Programa* pipeline = getPipeline(exec[i]);
+            Programa* pipeline = getPipeline(queue[i]);
             int t = 0;
             while(pipeline[t]){
                 strcat(line, getName(pipeline[t]));

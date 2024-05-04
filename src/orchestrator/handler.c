@@ -52,7 +52,7 @@ void handle_command(char* request){
     if(strcmp(command, "execute") == 0){
         int time = atoi(strtok(NULL, "\n"));
         char** prog = parseProgram(strtok(NULL, "\n"));
-        Tarefa t = novaTarefa(rand() % LIM_ID, prog[0], &prog[0], NULL);
+        Tarefa t = novaTarefa(rand() % LIM_ID, time, prog[0], &prog[0], NULL);
 
         if(checkSpace(exec, maxSize)){
             addExecking(exec, maxSize, t);
@@ -77,7 +77,7 @@ void handle_command(char* request){
     else if(strcmp(command, "executep") == 0){
         int time = atoi(strtok(NULL, "\n"));
         Programa* pipeline = novaPipeline(strtok(NULL, "\0"));
-        Tarefa t = novaTarefa(rand() % LIM_ID, NULL, NULL, pipeline);
+        Tarefa t = novaTarefa(rand() % LIM_ID, time, NULL, NULL, pipeline);
         if(checkSpace(exec, maxSize)){
             addExecking(exec, maxSize, t);
             int pid = fork();

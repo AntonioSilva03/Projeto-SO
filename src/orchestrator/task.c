@@ -4,16 +4,18 @@
 
 struct task{
     int id;
+    int time;
     int p;
     Programa programa;
     Programa* pipeline;
 };
 
-Tarefa novaTarefa(int id, char* name, char** args, Programa* pipeline){
+Tarefa novaTarefa(int id, int time, char* name, char** args, Programa* pipeline){
     if(pipeline == NULL){
         Tarefa t = malloc(sizeof(struct task));
         t->p = 0;
         t->id = id;
+        t->time = time;
         Programa p = novoPrograma(name, args);
         t->programa = p;
         return t;
@@ -22,6 +24,7 @@ Tarefa novaTarefa(int id, char* name, char** args, Programa* pipeline){
         Tarefa t = malloc(sizeof(struct task));
         t->p = 1;
         t->id = id;
+        t->time = time;
         t->pipeline = pipeline;
         return t;
     }
@@ -41,4 +44,8 @@ int getPipelineStatus(Tarefa t){
 
 Programa* getPipeline(Tarefa t){
     return t->pipeline;
+}
+
+int getTime(Tarefa t){
+    return t->time;
 }

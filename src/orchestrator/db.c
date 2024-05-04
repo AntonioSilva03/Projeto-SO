@@ -56,6 +56,16 @@ char* getOutputFile(){
     return strtok(file, "\n");
 }
 
+char *getPolitics(){
+    char file[BUFSIZ];
+    int fd = open(SETTINGS_PATH, O_RDONLY, 0666);
+    read(fd, file, sizeof(file));
+    close(fd);
+    strtok(file, "\n");
+    strtok(NULL, "\n");
+    return strtok(NULL, "\n");
+}
+
 void addFinished(Tarefa t, unsigned long time){
     int fd = open(FINISHED_PATH, O_WRONLY | O_APPEND, 0666);
     char data[BUFSIZ];
@@ -109,6 +119,9 @@ void addQueue(Tarefa* queue, Tarefa t){
         slot++;
     }
     queue[slot] = t;
+    if(strcmp(getPolitics(), "SJF") == 0){
+        sortQueue(queue);
+    }
 }
 
 void addExecking(Tarefa* exec, int maxSize, Tarefa t){
@@ -125,5 +138,19 @@ void removeExecking(Tarefa* exec, int maxSize, int pid){
         if(exec[i] != NULL && getID(exec[i]) == pid){
             exec[i] = NULL;
         }
+    }
+}
+
+void sortQueue(Tarefa* queue){
+    int size = 0;
+    while(queue[size]) size++;
+    for(int i = 0; i < size; i++){
+        Tarefa aux = queue[i];
+        int j = i - 1;
+        while(j >= 0 && getTime(aux) < getTime(queue[j])){
+            queue[j + 1] = queue[j];
+            --j;
+        }
+        queue[j + 1] = aux;
     }
 }
