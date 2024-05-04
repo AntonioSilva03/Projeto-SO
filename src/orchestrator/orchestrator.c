@@ -30,7 +30,16 @@ int main(int argc, char *argv[]){
         printf("Ja volto\n");
         close(fd_pipe);
 
-        handle_command(strdup(request));
+        char* buffer = strdup(request);
+        char* savePtr;
+
+        char* command = strtok_r(buffer, LIMITADOR_MENSAGENS, &savePtr);
+        while(command != NULL){
+            handle_command(strdup(command));
+            command = strtok_r(NULL, LIMITADOR_MENSAGENS, &savePtr);
+        }
+        free(buffer);
+
         memset(request, '\0', sizeof(request));
     }
     return 0;

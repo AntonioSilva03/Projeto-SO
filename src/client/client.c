@@ -34,6 +34,7 @@ int main(int argc, char *argv[]){
                 i++;
             }
             fd_pipe = open(PIPE_READ_PATH, O_WRONLY);
+            strcat(request, LIMITADOR_MENSAGENS);
             write(fd_pipe, request, strlen(request));
             close(fd_pipe);
 
@@ -58,7 +59,7 @@ int main(int argc, char *argv[]){
                 strcat(request, "\n");
                 i++;
             }
-
+            strcat(request, LIMITADOR_MENSAGENS);
             fd_pipe = open(PIPE_READ_PATH, O_WRONLY);
             write(fd_pipe, request, strlen(request));
             close(fd_pipe);
@@ -78,6 +79,9 @@ int main(int argc, char *argv[]){
     }
     else if(strcmp(command, "status") == 0){
         fd_pipe = open(PIPE_READ_PATH, O_WRONLY);
+        char request[BUFSIZ];
+        strcpy(request, command);
+        strcat(request, LIMITADOR_MENSAGENS);
         write(fd_pipe, command, strlen(command)); // Pedido de estado ao servidor
         close(fd_pipe);
 

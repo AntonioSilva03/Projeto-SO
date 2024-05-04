@@ -6,11 +6,10 @@
 #define PIPE_READ_PATH "../so-orchestrator/tmp/read"
 #define PIPE_WRITE_PATH "../so-orchestrator/tmp/write"
 #define SETTINGS_PATH "../so-orchestrator/tmp/settings.txt"
-#define PROCESS_PATH "../so-orchestrator/tmp/num_process.txt"
-#define QUEUE_PATH "../so-orchestrator/tmp/queue.txt"
 #define FINISHED_PATH "../so-orchestrator/tmp/finished.txt"
-#define EXEC_PATH "../so-orchestrator/tmp/exec.txt"
 #define PROGRAM_PATH "../so-orchestrator/programs/"
+
+#define LIMITADOR_MENSAGENS "??"
 
 #define LIM_ID 100000
 

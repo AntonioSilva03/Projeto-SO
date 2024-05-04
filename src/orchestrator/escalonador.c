@@ -53,6 +53,7 @@ void executePipeline(Tarefa t){
     char tmp[24];
     snprintf(tmp, sizeof(tmp), "%d\n", getID(t));
     strcat(buffer, tmp);
+    strcat(buffer, LIMITADOR_MENSAGENS);
     write(fd, buffer, strlen(buffer));
     close(fd);
 }
@@ -93,6 +94,7 @@ void addTask(Tarefa t){
         char tmp[24];
         snprintf(tmp, sizeof(tmp), "%d\n", getID(t));
         strcat(buffer, tmp);
+        strcat(buffer, LIMITADOR_MENSAGENS);
         write(fd, buffer, strlen(buffer));
         close(fd);
     }
