@@ -15,44 +15,50 @@ Tarefa* queue;
 int numProcess = 0;
 
 void executePipeline(Tarefa t){
-    int fd_output;
+    char* fileName = buildPath(getOutputFile(), getID(t));
+    int fd_output = open(fileName, O_WRONLY | O_CREAT, 0666);
+    int fd_anterior = -1, fd[2];
     struct timeval start;
     struct timeval end;
     int i = 0;
     Programa* pipeline = getPipeline(t);
     gettimeofday(&start, NULL);
     while(pipeline[i]){
+        pipe(fd);
         int pid = fork();
         if(pid < 0){
             perror("Error fork start exec: ");
         }
         else if(pid == 0){
-            char partialPath[8];
-            snprintf(partialPath, sizeof(partialPath), "%d-%d", getID(t), i);
-            char* fileName = buildPathPipe(getOutputFile(), partialPath);
-            fd_output = open(fileName, O_WRONLY | O_CREAT, 0666);
+            close(fd[0]);
 
-            dup2(fd_output, STDOUT_FILENO);
-            dup2(fd_output, STDERR_FILENO);
+            if(fd_anterior != -1){
+                dup2(fd_anterior, STDIN_FILENO);
+            }
+
+            if(pipeline[i + 1]) dup2(fd[1], STDOUT_FILENO);
+            else dup2(fd_output, STDOUT_FILENO);
 
             execvp(getName(pipeline[i]), getArgs(pipeline[i]));
         }
         else if(pid > 0){
+            close(fd[1]);
+
             waitpid(pid, NULL, 0);
-            close(fd_output);
+            fd_anterior = fd[0];
             i++;
         }
     }
     gettimeofday(&end, NULL);
     addFinished(t, (end.tv_sec - start.tv_sec) * 1000000 + abs(end.tv_usec));
-    int fd = open(PIPE_READ_PATH, O_WRONLY);
+    int fd2 = open(PIPE_READ_PATH, O_WRONLY);
     char buffer[40] = "end\n";
     char tmp[24];
     snprintf(tmp, sizeof(tmp), "%d\n", getID(t));
     strcat(buffer, tmp);
     strcat(buffer, LIMITADOR_MENSAGENS);
-    write(fd, buffer, strlen(buffer));
-    close(fd);
+    write(fd2, buffer, strlen(buffer));
+    close(fd2);
 }
 
 void addTask(Tarefa t){
