@@ -16,6 +16,19 @@ int new_fifo(){
     return 0;
 }
 
+char **parsePipeline(char *pipeline){
+    char **splittedPipeline = malloc(MAX_ARGS_SIZE);
+
+    int i = 0;
+    char* program = strtok(pipeline, "|");
+    while(program != NULL){
+        splittedPipeline[i] = strdup(program);
+        program = strtok(NULL, "|");
+        i++;
+    }
+    return splittedPipeline;
+}
+
 char **parseProgram(char *program){
     char **splittedArgs = malloc(MAX_ARGS_SIZE);
 
@@ -36,6 +49,15 @@ char *buildPath(char* mainPath, int pid){
     char* fileName = malloc(128);
     strcpy(fileName, mainPath);
     strcat(fileName, pidStr);
+
+    return fileName;
+}
+
+char *buildPathPipe(char* mainPath, char pid[]){
+    char* fileName = malloc(128);
+    strcpy(fileName, mainPath);
+    strcat(fileName, pid);
+    strcat(fileName, ".txt");
 
     return fileName;
 }

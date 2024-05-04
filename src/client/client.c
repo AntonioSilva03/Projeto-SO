@@ -46,7 +46,30 @@ int main(int argc, char *argv[]){
             write(STDOUT_FILENO, response, strlen(response));
         }
         else if(strcmp(option, "-p") == 0){
+            char** pipeline = parsePipeline(argv[4]);
 
+            char request[BUFSIZ] = "executep\n";
+            char timestr[12];
+            sprintf(timestr, "%d\n", time);
+            strcat(request, timestr);
+            int i = 0;
+            while(pipeline[i]){
+                strcat(request, pipeline[i]);
+                strcat(request, "\n");
+                i++;
+            }
+
+            fd_pipe = open(PIPE_READ_PATH, O_WRONLY);
+            write(fd_pipe, request, strlen(request));
+            close(fd_pipe);
+
+            char response[BUFSIZ];
+
+            fd_pipe = open(PIPE_WRITE_PATH, O_RDONLY);
+            read(fd_pipe, response, sizeof(response));
+            close(fd_pipe);
+
+            write(STDOUT_FILENO, response, strlen(response));
         }
         else{
             write(STDERR_FILENO, EXECUTE_USAGE, sizeof(EXECUTE_USAGE));

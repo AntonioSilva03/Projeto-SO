@@ -7,8 +7,10 @@
 
 typedef struct task *Tarefa;
 
-Tarefa novaTarefa(int id, char* name, char** args);
+Tarefa novaTarefa(int id, char* name, char** args, Programa* pipeline);
 int getID(Tarefa t);
 Programa getPrograma(Tarefa t);
+int getPipelineStatus(Tarefa t);
+Programa* getPipeline(Tarefa t);
 
 #endif

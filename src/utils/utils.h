@@ -15,8 +15,10 @@
 #define LIM_ID 100000
 
 int new_fifo();
+char **parsePipeline(char *pipeline);
 char** parseProgram(char *program);
 void writeSettings(char* args[]);
 char *buildPath(char* mainPath, int pid);
+char *buildPathPipe(char* mainPath, char pid[]);
 
 #endif

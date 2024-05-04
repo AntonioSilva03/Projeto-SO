@@ -52,7 +52,7 @@ void handle_command(char* request){
     if(strcmp(command, "execute") == 0){
         int time = atoi(strtok(NULL, "\n"));
         char** prog = parseProgram(strtok(NULL, "\n"));
-        Tarefa t = novaTarefa(rand() % LIM_ID, prog[0], &prog[0]);
+        Tarefa t = novaTarefa(rand() % LIM_ID, prog[0], &prog[0], NULL);
 
         if(checkSpace(exec, maxSize)){
             addExecking(exec, maxSize, t);
@@ -68,11 +68,34 @@ void handle_command(char* request){
         else addQueue(queue, t);
 
         char response[BUFSIZ];
-        snprintf(response, sizeof(response), "Pedido com ID: %d recebida com sucesso\n", getID(t));
+        snprintf(response, sizeof(response), "Tarefa com ID: %d recebida com sucesso\n", getID(t));
         fd_pipe = open(PIPE_WRITE_PATH, O_WRONLY);
         write(fd_pipe, response, strlen(response));
         close(fd_pipe);
         free(prog);
+    }
+    else if(strcmp(command, "executep") == 0){
+        int time = atoi(strtok(NULL, "\n"));
+        Programa* pipeline = novaPipeline(strtok(NULL, "\0"));
+        Tarefa t = novaTarefa(rand() % LIM_ID, NULL, NULL, pipeline);
+        if(checkSpace(exec, maxSize)){
+            addExecking(exec, maxSize, t);
+            int pid = fork();
+            if(pid < 0){
+                perror("Error forking exec: ");
+            }
+            else if(pid == 0){
+                addTask(t);
+                _exit(0);
+            }
+        }
+        else addQueue(queue, t);
+
+        char response[BUFSIZ];
+        snprintf(response, sizeof(response), "Pipeline com ID: %d recebida com sucesso\n", getID(t));
+        fd_pipe = open(PIPE_WRITE_PATH, O_WRONLY);
+        write(fd_pipe, response, strlen(response));
+        close(fd_pipe);
     }
     else if(strcmp(command, "status") == 0){
         int pid = fork();

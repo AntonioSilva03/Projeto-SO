@@ -7,6 +7,21 @@ struct program{
     char **argss;
 };
 
+Programa* novaPipeline(char* pipe){
+    Programa* pipeline = malloc(sizeof(struct program) * 10);
+    char* savePtr;
+    int i = 0;
+    char* program = strtok_r(pipe, "\n", &savePtr);
+    while(program != NULL){
+        char** singleProgram = parseProgram(program);
+        Programa p = novoPrograma(singleProgram[0], &singleProgram[0]);
+        pipeline[i] = p;
+        i++;
+        program = strtok_r(NULL, "\n", &savePtr);
+    }
+    return pipeline;
+}
+
 Programa novoPrograma(char* name, char** args){
     Programa p = malloc(sizeof(struct program));
     char path[256] = PROGRAM_PATH;

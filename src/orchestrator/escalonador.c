@@ -14,7 +14,54 @@ Tarefa* emExec;
 Tarefa* queue;
 int numProcess = 0;
 
+void executePipeline(Tarefa t){
+    int fd_output;
+    struct timeval start;
+    struct timeval end;
+    int i = 0;
+    Programa* pipeline = getPipeline(t);
+    gettimeofday(&start, NULL);
+    while(pipeline[i]){
+        int pid = fork();
+        if(pid < 0){
+            perror("Error fork start exec: ");
+        }
+        else if(pid == 0){
+            char partialPath[8];
+            snprintf(partialPath, sizeof(partialPath), "%d-%d", getID(t), i);
+            char* fileName = buildPathPipe(getOutputFile(), partialPath);
+            fd_output = open(fileName, O_WRONLY | O_CREAT, 0666);
+
+            dup2(fd_output, STDOUT_FILENO);
+            dup2(fd_output, STDERR_FILENO);
+
+            char fullPath[BUFSIZ];
+            strcpy(fullPath, PROGRAM_PATH);
+            strcat(fullPath, getName(pipeline[i]));
+            execvp(fullPath, getArgs(pipeline[i]));
+        }
+        else if(pid > 0){
+            waitpid(pid, NULL, 0);
+            close(fd_output);
+            i++;
+        }
+    }
+    gettimeofday(&end, NULL);
+    addFinished(t, (end.tv_sec - start.tv_sec) * 1000000 + abs(end.tv_usec));
+    int fd = open(PIPE_READ_PATH, O_WRONLY);
+    char buffer[40] = "end\n";
+    char tmp[24];
+    snprintf(tmp, sizeof(tmp), "%d\n", getID(t));
+    strcat(buffer, tmp);
+    write(fd, buffer, strlen(buffer));
+    close(fd);
+}
+
 void addTask(Tarefa t){
+    if(getPipelineStatus(t)){
+        executePipeline(t);
+        return;
+    }
     int fd_output;
     struct timeval start;
     struct timeval end;
@@ -29,7 +76,11 @@ void addTask(Tarefa t){
         Programa p = getPrograma(t);
         dup2(fd_output, STDOUT_FILENO);
         dup2(fd_output, STDERR_FILENO);
-        execvp(getName(p), getArgs(p));
+
+        char fullPath[BUFSIZ];
+        strcpy(fullPath, PROGRAM_PATH);
+        strcat(fullPath, getName(p));
+        execvp(fullPath, getArgs(p));
     }
     else if(pid > 0){
         gettimeofday(&start, NULL);
@@ -53,11 +104,26 @@ char *getStatus(Tarefa* queue, Tarefa* exec, int maxSize){
     strcpy(execking, "Executing:\n");
     for(int i = 0; i < maxSize; i++){
         if(exec[i] != NULL){
-            char line[BUFSIZ] = "";
-            sprintf(line, "%d ", getID(exec[i]));
-            strcat(line, getName(getPrograma(exec[i])));
-            strcat(line, "\n");
-            strcat(execking, line);
+            if(!getPipelineStatus(exec[i])){
+                char line[BUFSIZ] = "";
+                sprintf(line, "%d ", getID(exec[i]));
+                strcat(line, getName(getPrograma(exec[i])));
+                strcat(line, "\n");
+                strcat(execking, line);
+            }
+            else{
+                char line[BUFSIZ] = "";
+                sprintf(line, "%d ", getID(exec[i]));
+                Programa* pipeline = getPipeline(exec[i]);
+                int t = 0;
+                while(pipeline[t]){
+                    strcat(line, getName(pipeline[t]));
+                    strcat(line, " | ");
+                    t++;
+                }
+                strcat(line, "\n");
+                strcat(execking, line);
+            }
         }
     }
     strcpy(status, execking);
@@ -66,12 +132,28 @@ char *getStatus(Tarefa* queue, Tarefa* exec, int maxSize){
     strcpy(queueing, "\nScheduled:\n");
     int i = 0;
     while(queue[i]){
-        char line[BUFSIZ];
-        sprintf(line, "%d ", getID(queue[i]));
-        strcat(line, getName(getPrograma(queue[i])));
-        strcat(line, "\n");
-        strcat(queueing, line);
-        i++;
+        if(!getPipelineStatus(queue[i])){
+            char line[BUFSIZ];
+            sprintf(line, "%d ", getID(queue[i]));
+            strcat(line, getName(getPrograma(queue[i])));
+            strcat(line, "\n");
+            strcat(queueing, line);
+            i++;
+        }
+        else{
+            char line[BUFSIZ];
+            sprintf(line, "%d ", getID(queue[i]));
+            Programa* pipeline = getPipeline(exec[i]);
+            int t = 0;
+            while(pipeline[t]){
+                strcat(line, getName(pipeline[t]));
+                strcat(line, " | ");
+                t++;
+            }
+            strcat(line, "\n");
+            strcat(queueing, line);
+            i++;
+        }
     }
     strcat(status, queueing);
 

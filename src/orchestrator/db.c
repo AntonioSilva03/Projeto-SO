@@ -61,15 +61,32 @@ void addFinished(Tarefa t, unsigned long time){
     char data[96];
     sprintf(data, "%d ", getID(t));
 
-    Programa p = getPrograma(t);
-    strcat(data, getName(p));
-    strcat(data, " ");
+    if(!getPipelineStatus(t)){
+        Programa p = getPrograma(t);
+        strcat(data, getName(p));
+        strcat(data, " ");
 
-    char timeStr[28];
-    sprintf(timeStr, "%ld ms\n", time);
-    strcat(data, timeStr);
-    write(fd, data, strlen(data));
-    close(fd);
+        char timeStr[28];
+        sprintf(timeStr, "%ld ms\n", time);
+        strcat(data, timeStr);
+        write(fd, data, strlen(data));
+        close(fd);
+    }
+    else{
+        Programa* pipeline = getPipeline(t);
+        int i = 0;
+        while(pipeline[i]){
+            strcat(data, getName(pipeline[i]));
+            strcat(data, " | ");
+            i++;
+        }
+
+        char timeStr[28];
+        sprintf(timeStr, "%ld ms\n", time);
+        strcat(data, timeStr);
+        write(fd, data, strlen(data));
+        close(fd);
+    }
 }
 
 char* getFinished(){
