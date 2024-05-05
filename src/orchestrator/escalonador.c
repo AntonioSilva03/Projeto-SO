@@ -10,10 +10,6 @@
 #include "program.h"
 #include <sys/time.h>
 
-Tarefa* emExec;
-Tarefa* queue;
-int numProcess = 0;
-
 void executePipeline(Tarefa t){
     char* fileName = buildPath(getOutputFile(), getID(t));
     int fd_output = open(fileName, O_WRONLY | O_CREAT, 0666);
