@@ -11,6 +11,11 @@ struct task{
 };
 
 Tarefa novaTarefa(int id, int time, char* name, char** args, Programa* pipeline){
+    if(id == 0){
+        Tarefa t = malloc(sizeof(struct task));
+        t->id = 0;
+        return t;
+    }
     if(pipeline == NULL){
         Tarefa t = malloc(sizeof(struct task));
         t->p = 0;

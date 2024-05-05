@@ -93,6 +93,14 @@ int main(int argc, char *argv[]){
 
         write(STDOUT_FILENO, response, strlen(response));
     }
+    else if(strcmp(command, "close") == 0){
+        fd_pipe = open(PIPE_READ_PATH, O_WRONLY);
+        char request[BUFSIZ];
+        strcpy(request, command);
+        strcat(request, LIMITADOR_MENSAGENS);
+        write(fd_pipe, command, strlen(command)); // Pedido de estado ao servidor
+        close(fd_pipe);
+    }
     else{
         write(STDERR_FILENO, ARGS_ERROR, sizeof(ARGS_ERROR));
         _exit(1);

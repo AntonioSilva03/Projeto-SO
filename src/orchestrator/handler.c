@@ -49,7 +49,23 @@ void handle_command(char* request){
     int fd_pipe;
 
     char* command = strtok(request, "\n");
-    if(strcmp(command, "execute") == 0){
+    if(strcmp(command, "close") == 0){
+        Tarefa t = novaTarefa(0, 0, NULL, NULL, NULL);
+
+        if(checkSpace(exec, maxSize)){
+            addExecking(exec, maxSize, t);
+            int pid = fork();
+            if(pid < 0){
+                perror("Error forking exec: ");
+            }
+            else if(pid == 0){
+                addTask(t);
+                _exit(0);
+            }
+        }
+        else addQueue(queue, t);
+    }
+    else if(strcmp(command, "execute") == 0){
         int time = atoi(strtok(NULL, "\n"));
         char** prog = parseProgram(strtok(NULL, "\n"));
         Tarefa t = novaTarefa(rand() % LIM_ID, time, prog[0], &prog[0], NULL);

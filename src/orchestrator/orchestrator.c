@@ -24,10 +24,10 @@ int main(int argc, char *argv[]){
     initDB();
 
     while(1){
-        printf("Leitura\n");
+        //printf("Leitura\n");
         fd_pipe = open(PIPE_READ_PATH, O_RDONLY);
         read(fd_pipe, request, sizeof(request));
-        printf("Ja volto\n");
+        //printf("Ja volto\n");
         close(fd_pipe);
 
         char* buffer = strdup(request);

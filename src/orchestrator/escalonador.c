@@ -74,6 +74,9 @@ void addTask(Tarefa t){
         perror("Error fork start exec: ");
     }
     else if(pid == 0){
+        if(getID(t) == 0){
+            _exit(0);
+        }
         char* fileName = buildPath(getOutputFile(), getID(t));
         fd_output = open(fileName, O_WRONLY | O_CREAT, 0666);
 
@@ -88,7 +91,8 @@ void addTask(Tarefa t){
         waitpid(pid, NULL, 0);
         gettimeofday(&end, NULL);
         close(fd_output);
-        addFinished(t, ((end.tv_sec - start.tv_sec) * 1000) + (abs(end.tv_usec) / 1000));
+        if(getID(t) == 0) addFinished(NULL, 0);
+        else addFinished(t, ((end.tv_sec - start.tv_sec) * 1000) + (abs(end.tv_usec) / 1000));
         int fd = open(PIPE_READ_PATH, O_WRONLY);
         char buffer[40] = "end\n";
         char tmp[24];
@@ -134,6 +138,10 @@ char *getStatus(Tarefa* queue, Tarefa* exec, int maxSize){
     strcpy(queueing, "\nScheduled:\n");
     int i = 0;
     while(queue[i]){
+        if(getID(queue[i]) == 0){
+            i++;
+            continue;
+        }
         if(!getPipelineStatus(queue[i])){
             char line[BUFSIZ];
             sprintf(line, "%d ", getID(queue[i]));

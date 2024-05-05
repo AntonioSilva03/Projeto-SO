@@ -69,6 +69,14 @@ char *getPolitics(){
 void addFinished(Tarefa t, unsigned long time){
     int fd = open(FINISHED_PATH, O_WRONLY | O_APPEND, 0666);
     char data[BUFSIZ];
+
+    if(t == NULL){
+        strcpy(data, "All tasks finished\n");
+        write(fd, data, strlen(data));
+        close(fd);
+        return;
+    }
+
     sprintf(data, "%d ", getID(t));
 
     if(!getPipelineStatus(t)){
