@@ -51,5 +51,5 @@ clean:
 cleanout:
 	rm -f out/*.txt
 
-run test:
+test:
 	./src/test/testing.sh

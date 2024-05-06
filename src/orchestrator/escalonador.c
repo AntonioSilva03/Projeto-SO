@@ -90,7 +90,10 @@ void addTask(Tarefa t){
         waitpid(pid, NULL, 0);
         gettimeofday(&end, NULL);
         close(fd_output);
-        if(getID(t) == 0) addFinished(NULL, 0);
+        if(getID(t) == 0){
+            free(t);
+            addFinished(NULL, 0);
+        }
         else addFinished(t, ((end.tv_sec - start.tv_sec) * 1000) + (abs(end.tv_usec) / 1000));
         int fd = open(PIPE_READ_PATH, O_WRONLY);
         char buffer[40] = "end\n";

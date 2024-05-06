@@ -144,6 +144,7 @@ void addExecking(Tarefa* exec, int maxSize, Tarefa t){
 void removeExecking(Tarefa* exec, int maxSize, int pid){
     for(int i = 0; i < maxSize; i++){
         if(exec[i] != NULL && getID(exec[i]) == pid){
+            free(exec[i]);
             exec[i] = NULL;
         }
     }
