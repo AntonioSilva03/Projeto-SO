@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include "escalonador.h"
 #include "task.h"
@@ -21,6 +22,8 @@ void executePipeline(Tarefa t){
     gettimeofday(&start, NULL);
     while(pipeline[i]){
         pipe(fd);
+        fcntl(fd[0], F_SETPIPE_SZ, BUFSIZ * 64);
+        fcntl(fd[1], F_SETPIPE_SZ, BUFSIZ * 64);
         int pid = fork();
         if(pid < 0){
             perror("Error fork start exec: ");

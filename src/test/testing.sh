@@ -43,7 +43,7 @@ executar_servidor() {
         $comando_executar "../so-orchestrator/programs/hello 3" >/dev/null
         $comando_pipeline "cat "../so-orchestrator/programs/file.txt" | grep "palavra" | wc -l" >/dev/null
         $comando_executar "../so-orchestrator/programs/hello 3" >/dev/null
-        $comando_pipeline "cat "../so-orchestrator/programs/file.txt" | grep "palavra" | wc -l" >/dev/null
+        $comando_pipeline "../so-orchestrator/programs/hello 1 | grep "cosmos" | wc -l" >/dev/null
         ./bin/client close
     done
 
