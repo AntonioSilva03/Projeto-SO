@@ -81,7 +81,7 @@ O servidor essencialmente consegue executar com duas políticas de escalonamento
 ## Testes
 É possível testar os tempos de execução das várias políticas com as mesmas tarefas
 ```console
-./src/test/testing.sh
+make run test
 ```
 - O programa será compilado e ambas as políticas serão aplicadas junto com um conjunto de tarefas aleatórias.
 - Será também medido o tempo de execução de cada uma.
