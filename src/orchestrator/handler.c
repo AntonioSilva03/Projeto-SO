@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
+#include <limits.h>
 
 Tarefa* queue;
 Tarefa* exec;
@@ -50,7 +51,7 @@ void handle_command(char* request){
 
     char* command = strtok(request, "\n");
     if(strcmp(command, "close") == 0){
-        Tarefa t = novaTarefa(0, 0, NULL, NULL, NULL);
+        Tarefa t = novaTarefa(0, INT_MAX, NULL, NULL, NULL);
 
         if(checkSpace(exec, maxSize)){
             addExecking(exec, maxSize, t);

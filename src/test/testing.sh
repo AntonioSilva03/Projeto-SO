@@ -3,7 +3,7 @@
 # Defina o diretório de saída e o número de execuções
 output_dir="../so-orchestrator/out/"
 tmp_dir="../so-orchestrator/tmp/"
-num_execucoes=1
+num_execucoes=2
 
 make clean
 make cleanout
@@ -34,7 +34,7 @@ executar_servidor() {
 
     # Envie os mesmos pedidos para o servidor
     echo "Enviando pedidos para o servidor..."
-    for ((i = 0; i < num_execucoes; i++)); do
+    for ((i = 0; i < 1; i++)); do
         # Envie os pedidos para o servidor
         $comando_executar "../so-orchestrator/programs/hello 3" >/dev/null
         $comando_pipeline "cat "../so-orchestrator/programs/file.txt" | grep "palavra" | wc -l" >/dev/null
